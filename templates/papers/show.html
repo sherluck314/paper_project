@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    论文列表
+{% endblock title %}
+
+{% block ttitle %}
+    论文列表
+{% endblock ttitle %}
+
+{% block button1 %}
+    <li class="cl-effect-11"><a href="{% url "papers:show" %}" data-hover="论文列表">论文列表</a></li>
+    <li class="cl-effect-11"><a href="{% url "admin:index" %}papers/paper/add/" data-hover="上传">上传</a></li>
+{% endblock button1 %}
+
+{% block main %}
+    <div class="container paper">
+        <div class="row">
+            <main class="col-md-9">
+                {% for paper in paper_list %}
+                    <article class="post post-{{ paper.pk }}">
+                        <header class="entry-header">
+                            <h1 class="entry-title">
+                                <a href="{{ paper.get_absolute_url }}">{{ paper.title }}</a>
+                            </h1>
+                            <div class="entry-meta">
+                                <span class="post-category"><a
+                                        href={% url 'papers:filter_by_keyword' '小组' paper.researcher.topic.name %}>{{ paper.researcher.topic.name }}</a></span>
+                                <span class="post-author"><a
+                                        href={% url 'papers:filter_by_keyword' '上传者' paper.researcher.name %}>{{ paper.researcher.name }}</a></span>
+                            </div>
+                            <div class="widget widget-tag-cloud">
+                                {% for t in paper.tag.all %}
+                                    <ul>
+                                        <li>
+                                            <a href={% url 'papers:filter_by_keyword' '标签' t.name %}>
+                                                {{ t.name }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                {% endfor %}
+                            </div>
+                        </header>
+                        <div class="small-content clearfix">
+                            <p>{{ paper.small_review }}</p>
+                        </div>
+                    </article>
+                {% empty %}
+                    <div class="no-post">不存在满足条件的论文！</div>
+                {% endfor %}
+            </main>
+            <aside class="col-md-3">
+                <div class="widget widget-tag-cloud  select-area">
+                    <h3 class="widget-title">条件筛选</h3>
+                    {% for tag in tag_list %}
+                        <ul>
+                            {% if tag.name in select_tag_list %}
+                                <li class="after-select-li">
+                                    <span>{{ tag.name }}</span> {{ tag.paper_num }}篇
+                                </li>
+                            {% else %}
+                                {% if tag.paper_num > 0 %}
+                                    <li class="before-select-li">
+                                        <span>{{ tag.name }}</span> {{ tag.paper_num }}篇
+                                    </li>
+                                {% else %}
+                                    <li class="no-select-li">
+                                        <span>{{ tag.name }}</span> {{ tag.paper_num }}篇
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                    {% endfor %}
+                </div>
+                <div class="button_area">
+                    <button class="and_button condition_button">与查询</button>
+                    <button class="or_button condition_button">或查询</button>
+                    <button class="empty_button">清空</button>
+                </div>
+            </aside>
+        </div>
+    </div>
+{% endblock main %}

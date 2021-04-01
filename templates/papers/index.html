@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    首页
+{% endblock title %}
+
+{% block ttitle %}
+    首页
+{% endblock ttitle %}
+
+{% block button1 %}
+    <li class="cl-effect-11"><a href="{% url "papers:show" %}" data-hover="论文列表">论文列表</a></li>
+    <li class="cl-effect-11"><a href="{% url "admin:index" %}papers/paper/add" data-hover="上传">上传</a></li>
+{% endblock button1 %}
+
+{% block main %}
+    <div class="container paper">
+        <div class="row">
+            <main class="col-md-12">
+                {% for topic in topic_list %}
+                    <h1 class="entry-title">
+                        <a href={% url 'papers:filter_by_keyword' '小组' topic.name %}>{{ topic.name }}小组</a>
+                    </h1>
+                    <div class="widget widget-tag-cloud">
+                        {% for researcher in topic.researcher_set.all %}
+                            <ul>
+                                <li>
+                                    <a href={% url 'papers:filter_by_keyword' '上传者' researcher.name %}>{{ researcher.name }}</a>
+                                </li>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                <div class="widget widget-tag-cloud  select-area">
+                    <h3 class="widget-title">条件筛选</h3>
+                    {% for tag in tag_list %}
+                        <ul>
+                            {% if tag.name in select_tag_list %}
+                                <li class="after-select-li">
+                                    <span>{{ tag.name }}</span> {{ tag.paper_num }}篇
+                                </li>
+                            {% else %}
+                                {% if tag.paper_num > 0 %}
+                                    <li class="before-select-li">
+                                        <span>{{ tag.name }}</span> {{ tag.paper_num }}篇
+                                    </li>
+                                {% else %}
+                                    <li class="no-select-li">
+                                        <span>{{ tag.name }}</span> {{ tag.paper_num }}篇
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                    {% endfor %}
+                </div>
+                <div class="button_area">
+                    <button class="and_button condition_button">与查询</button>
+                    <button class="or_button condition_button">或查询</button>
+                    <button class="empty_button">清空</button>
+                </div>
+            </main>
+        </div>
+    </div>
+{% endblock main %}

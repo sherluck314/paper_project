@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    论文详情
+{% endblock title %}
+
+{% block ttitle %}
+    论文详情
+{% endblock ttitle %}
+
+{% block button1 %}
+    <li class="cl-effect-11"><a href="{% url "papers:show" %}" data-hover="论文列表">论文列表</a></li>
+    <li class="cl-effect-11"><a href="{% url "admin:index" %}papers/paper/add/" data-hover="上传">上传</a></li>
+    {% if paper.if_updater %}
+        <li class="cl-effect-11"><a href="{% url "admin:index" %}papers/paper/{{ paper.pk }}/change" data-hover="编辑">编辑</a></li>
+    {% endif %}
+{% endblock button1 %}
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <main class="col-md-12">
+                <article class="post post-{{ paper.pk }}">
+                    <header class="entry-header">
+                        <h1 class="entry-title">
+                            {{ paper.title }}
+                        </h1>
+                        <div class="entry-meta">
+                            <span class="post-category">{{ paper.researcher.topic.name }}</span>
+                            <span class="post-author">{{ paper.researcher.name }}</span>
+                        </div>
+                        <div class="widget widget-tag-cloud">
+                            {% for t in paper.tag.all %}
+                                <ul>
+                                    <li>
+                                        {{ t.name }}
+                                    </li>
+                                </ul>
+                            {% endfor %}
+                        </div>
+                    </header>
+                    <div class="big-content clearfix">
+                        {{ paper.review | safe }}
+                    </div>
+                </article>
+            </main>
+        </div>
+    </div>
+{% endblock main %}
