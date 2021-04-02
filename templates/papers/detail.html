@@ -20,7 +20,7 @@
     <div class="container">
         <div class="row">
             <main class="col-md-12">
-                <article class="post post-{{ paper.pk }}">
+                <article class="post post">
                     <header class="entry-header">
                         <h1 class="entry-title">
                             {{ paper.title }}
@@ -29,7 +29,7 @@
                             <span class="post-category">{{ paper.researcher.topic.name }}</span>
                             <span class="post-author">{{ paper.researcher.name }}</span>
                         </div>
-                        <div class="widget widget-tag-cloud">
+                        <div class="widget widget-tag-cloud show-tag">
                             {% for t in paper.tag.all %}
                                 <ul>
                                     <li>
