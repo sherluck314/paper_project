@@ -55,7 +55,12 @@ def filter_by_keyword(request, keyword, value):
         if keyword == '上传者':
             paper_list = Paper.objects.filter(researcher=Researcher.objects.get(name=value))
         elif keyword == '小组':
-            paper_list = Paper.objects.filter(researcher=Researcher.objects.get(topic=Topic(value)))
+            print(Topic.objects.get(name=value))
+            researchers = Researcher.objects.filter(topic=Topic(name=value))
+            print(researchers)
+            paper_list = []
+            for researcher in researchers:
+                paper_list += Paper.objects.filter(researcher=Researcher.objects.get(name=researcher.name))
         elif keyword == '标签':
             paper_list = Paper.objects.filter(tag=Tag.objects.get(name=value))
         else:
